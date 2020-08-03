@@ -72,6 +72,14 @@ TEMPLATES = [
 ASGI_APPLICATION = 'rmasy.routing.application'
 WSGI_APPLICATION = 'rmasy.wsgi.application'
 
+CHANNEL_LAYERS = {
+        "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+        "hosts": [("realmapping.herokuapp.com/", 6379)],
+        },
+    },
+}
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
