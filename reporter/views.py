@@ -1,10 +1,12 @@
 from django.shortcuts import render
 from django.utils.safestring import mark_safe
 import json
-# Create your views here.
 
-def HomeP(request):
-	return render(request,'welcome.html',{})
+def Prohome(request):
+    return render(request,'welcome.html',{})
 
-def room(request, room_name):
-	return render(request, 'room.html', {'room_name_json': mark_safe(json.dumps(room_name))})
+
+def Proreporter(request, code):
+    return render(request, 'room.html', {
+        'room_name_json': mark_safe(json.dumps(code))
+})

@@ -1,0 +1,140 @@
+
+.home{
+	display: block;
+	border: 3px solid #ef94ff;
+	text-decoration-style: none;
+	height: 600px;
+	background-color: #fff;
+	border-radius: 6px;
+
+}
+#emer{
+	height: 590px;
+	width: 99%;
+	margin-left: 4px;
+	margin-right: 4px;
+	margin-top: 4px;
+	margin-bottom: 4px;
+}
+#map{
+	height: 540px;
+	width: 100%;
+	margin-bottom: 4px;
+	
+}
+#hermesy{
+	height: 590px;
+	width: 99%;
+	margin-left: 4px;
+	margin-right: 4px;
+	margin-top: 4px;
+	margin-bottom: 6px;
+}
+
+.Blocky{
+  margin: auto; 
+  display: block;
+  text-decoration-style: none;
+  padding: 10px;
+  border: 15px solid #ccc;
+  background-color: #ccc;
+  border-radius: 5px;
+  margin-top: 120px;
+  height: 500px;
+  width: 400px;
+  font-size: 16px;
+}
+.Blocky h3{
+	text-align: center;
+	color: #333;
+	margin-top: 0px;
+	font-family: verdana;
+}
+@media(max-width: 768px){
+	.Blocky{
+	  margin: auto; 
+	  display: block;
+	  text-decoration-style: none;
+	  padding: 10px;
+	  border: 15px solid #ccc;
+	  background-color: #ccc;
+	  border-radius: 5px;
+	  margin-top: 125px;
+	  height: 500px;
+	  width: 100%;
+	  font-size: 12px;
+	}
+}
+.BlockyR{
+  margin: auto; 
+  display: block;
+  text-decoration-style: none;
+  padding: 10px;
+  border: 15px solid #ccc;
+  background-color: #ccc;
+  border-radius: 5px;
+  margin-top: 10px;
+  height: 400px;
+  width: 30%;
+  font-size: 16px;
+ 
+}
+
+.BlockyR p{
+	padding: 15px;
+}
+@media(max-width: 768px){
+	.BlockyR{
+	  margin: auto; 
+	  display: block;
+	  text-decoration-style: none;
+	  padding: 10px;
+	  border: 15px solid #ccc;
+	  background-color: #ccc;
+	  border-radius: 5px;
+	  margin-top: 10px;
+	  height: 330px;
+	  width: 100%;
+	  font-size: 12px;
+	}
+}
+.back_ground{
+	background-color: #5F649D;
+	padding: 25px;
+	padding-bottom: 100px;
+}
+
+/*LOGIN*/
+	.login{
+		padding: 50px 0 80px;
+		text-align: center;
+
+	}
+	.login p{
+		padding-bottom: 80px;
+		color: #737373;
+	}
+	.login h2{
+		color: #4c4c4c;
+		margin: 20px 0 20px;
+	}
+	.login .input-group{
+		margin-bottom: 25px; 
+	}
+	.login .form-control{
+		border-radius: 0px !important;
+	}
+	.login span{
+		border-radius: 0px !important;
+	}
+	.login .btn{
+		border-radius: 0px;
+		width: 100%;
+		font-size: 15px;
+		background-color: #286090;
+		color: #fff;
+	}
+	.login .btn:hover{
+		background-color: #a85959;
+		color: #fff !important; 
+	}

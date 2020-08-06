@@ -1,43 +1,177 @@
 <!-- chat/templates/chat/room.html -->
+{% load static %}
+{% load leaflet_tags %}
 <!DOCTYPE html>
 <html>
 <head>
+    {% leaflet_css %}
+    {% leaflet_js %}
+    {% leaflet_js plugins="forms" %}
+   {% leaflet_css plugins="forms" %}
 <meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,shrink-to-fit=no">
+
 <title>Chat Room</title>
+<link rel="stylesheet" type="text/css" href="{%static 'font-awesome/css/font-awesome.min.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/easy-button.css' %}">
+<link rel="stylesheet" type="text/css" href="{%static 'routing/leaflet-routing-machine.css' %}">
+<link rel="stylesheet" type="text/css" href="{%static 'css/leaflet.groupedlayercontrol.min.css' %}">
+<link rel="stylesheet" type="text/css" href="{%static 'leaflet/Control.Geocoder.css' %}">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" type="text/css" href="{% static 'css/jquery-ui.css' %}">
+
+<style>
+    #real{
+        height: 500px;
+        width: 100%;
+        margin-left: 2px;
+        background-color: #ccc;
+    }
+    #container{
+        width: 100%;
+        height: auto;
+    }
+    #markers{
+        width: 20%;
+        height: auto;
+        border: 1px solid #fff;
+        float: left;
+        padding: 0px !important;
+        margin-top: 5px;
+    }
+    #markers ul li{
+        display: block;
+        padding: 10px;
+    }
+    #markers h2{
+        text-align: center;
+        font-family: verdana;
+        font-style: italic;
+    }
+    /* #map{
+        width: 100%;
+        /* float: right; */
+    } */
+    #mrk button{
+        background-color: red;
+    }
+</style>
+<script src="{% static 'js/jquery-3.3.1.js' %}"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script type="text/javascript" src="{% static 'js/easy-button.js' %}" ></script>
+<script type="text/javascript" src="{%static 'js/leaflet.groupedlayercontrol.min.js' %}"></script>
+<script type="text/javascript" src="{%static 'routing/leaflet-routing-machine.js' %}"></script>
+<script type="text/javascript" src="{%static 'leaflet/Control.Geocoder.js' %}"></script>
+
 </head>
 <body>
-<textarea id="chat-log" cols="100" rows="20"></textarea><br/>
-<input id="chat-message-input" type="text" size="100"/><br/>
-<input id="chat-message-submit" type="button" value="Send"/>
-</body>
+    <h1 align="middle">Welcome to realtime mapping</h1>
+    <!-- dialog -->
 
+    <input type="text" id="pop" placeholder="Enter pop up" style="padding:15px;width:96%;margin:10px auto;border-radius:3px;border-left:8px solid lime;border-right:8px solid lime;background-color:black;color:white;font-size: 24px;">
+    <div id="container">
+        <div id="map">
+                {% leaflet_map 'real' callback="window.Realmap" %}
+        </div>
+        <div id="dialog" title="Find Nearest clinic">
+                <form method="post" action="" role="" id="post-form-base">
+                   {% csrf_token %}
+                     <input id="email" type="email" name="email" placeholder="email" class="form-control"><br/>
+                     <input id="coordinates" name="coordinates" value=""  class="form-control ayub"/><br/>
+                     <button type="submit" name="" class="btn btn-success">submit</button>
+                     <div id="trial" >
+                       <br/>
+                         <textarea value="mnm" id="mnm" cols="28" rows="4"></textarea>
+                     </div>
+               </form>
+           </div>
+    </div>
+</body>
 <script>
 
-var roomName = {{ room_name_json }};
+    var roomName = {{ room_name_json }};
+    var chatSocket = new WebSocket('ws://' + window.location.host +'/ws/report/' + roomName + '/');
+ 
+function Realmap(map,option){
+    var osm = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+    var opentopomap = new L.TileLayer('http://{s}.tile.opentopomap.org/{z}/{x}/{y}.png');
+    var arcon = new L.tileLayer('http://server.arcgisonline.com/ArcGis/rest/services/World_Imagery/Mapserver/tile/{z}/{y}/{x}');
+    $( "#dialog" ).hide()
+    var dataurl = '{% url "data" %}';
+    
+        // Download GeoJSON via Ajax
+    $.getJSON(dataurl, function (data) {
+        // Add GeoJSON layer
+       
+        L.geoJson(data).addTo(map);
+    });
 
-var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
-var chatSocket = new WebSocket(ws_scheme +'://' + window.location.host +'/'+ws_scheme+'/report/' + roomName + '/');
+    // geolocation
+     // Geolocating
+     L.easyButton('<img src="{%static "img/log.PNG" %}" style="width:16px">',
+        function (){
+        map.locate({setView: true,maxZoom:17});
+        function onLocationFound(e)
+            {
+            var radius = e.accuracy / 2
+            var lat = e.latlng.lat
+            var lng = e.latlng.lng
+            $('#coordinates').val(lng + ',' + lat) 
+            $( "#dialog" ).dialog();
+            // Script for picking the coordinates and matching them to the id
+            // $('#coordinates').val(lng + ',' + lat) 
 
-chatSocket.onmessage = function(e) {
-	var data = JSON.parse(e.data);
-	var message = data['message'];
-	document.querySelector('#chat-log').value += (message + '\n');
-};
-chatSocket.onclose = function(e) {
-	document.querySelector('#chat-message-input').focus();
-	document.querySelector('#chat-message-input').onkeyup = function(e) {
-	if (e.keyCode === 13) { // enter, return
-		document.querySelector('#chat-message-submit').click();
-	}
-}
-};
-document.querySelector('#chat-message-submit').onclick = function(e) {
-	var messageInputDom = document.querySelector('#chat-message-input');
-	var message = messageInputDom.value;
-	chatSocket.send(JSON.stringify({
-		'message': message
-	}));
-messageInputDom.value = '';
-};
+            L.marker(e.latlng).addTo(map).bindPopup('You are within ' + radius + ' meters from this point').openPopup();
+            L.circle(e.latlng,radius).addTo(map);
+            }
+
+            map.on('locationfound',onLocationFound);
+
+            function onLocationError(e)
+            {
+            alert(e.message);
+            }
+
+            map.on('locationerror',onLocationError);
+        },
+        'Geolocate'
+    ).addTo(map);
+
+
+    console.log('testing');
+     // get message
+     chatSocket.onmessage = function(e) {
+            var data = JSON.parse(e.data);
+            
+            var data1 = data['data1'];
+            marker = L.marker([data1.lat,data1.lon],{}).addTo(map).bindPopup(data1.popmsg);
+          
+            
+        };
+
+        // socket close
+        chatSocket.onclose = function(e) {
+            console.error('Chat socket closed unexpectedly');
+        };
+    function OnMapClick(event){
+
+       if($('#pop').val()==''){
+           alert('Write message');
+       }else{
+        // send to consumer
+        var data1 = {
+            lat: event.latlng.lat,
+            lon: event.latlng.lng,
+            popmsg: $('#pop').val()
+        }
+        chatSocket.send(JSON.stringify({
+            'data1': data1
+        }));
+    }}
+
+    map.on('click',OnMapClick)
+    
+    }
+
 </script>
 </html>

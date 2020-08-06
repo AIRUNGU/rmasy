@@ -38,7 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'reporter'
+    'reporter',
+    'leaflet',
+    'djgeojson'
 ]
 
 MIDDLEWARE = [
@@ -129,3 +131,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 STATICFILES_DIRS = (os.path.join(BASE_DIR,'static'),)
 STATIC_URL = '/static/'
+
+LEAFLET_CONFIG = {
+    'DEFAULT_CENTER': (-0.41267, 36.953531),
+    'DEFAULT_ZOOM': 12,
+    'MIN_ZOOM': 3,
+    'MAX_ZOOM': 16,
+    'SCALE':'both',
+    'TILES': 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    'ATTRIBUTION_PREFIX': 'Powered by GEO-REAL TIME REPORTER &copy; lEAFLET',
+}
