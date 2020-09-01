@@ -6,4 +6,5 @@ channels
 channels_redis
 django-leaflet
 django-geojson
+jsonfield
 
