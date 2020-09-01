@@ -71,8 +71,9 @@ TEMPLATES = [
     },
 ]
 
-ASGI_APPLICATION = 'rmasy.routing.application'
 WSGI_APPLICATION = 'rmasy.wsgi.application'
+ASGI_APPLICATION = 'rmasy.routing.application'
+
 
 CHANNEL_LAYERS = {
         "default": {
