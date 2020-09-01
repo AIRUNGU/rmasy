@@ -142,4 +142,3 @@ LEAFLET_CONFIG = {
     'ATTRIBUTION_PREFIX': 'Powered by GEO-REAL TIME REPORTER &copy; lEAFLET',
 }
 
-GDAL_LIBRARY_PATH = '/app/.apt/usr/bin/ogr2ogr'
