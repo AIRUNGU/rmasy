@@ -90,7 +90,7 @@
 <script>
 
     var roomName = {{ room_name_json }};
-    var chatSocket = new WebSocket('ws://' + window.location.host +'/ws/report/' + roomName + '/');
+    var chatSocket = new WebSocket('wss://' + window.location.host +'/wss/report/' + roomName + '/');
  
 function Realmap(map,option){
     var osm = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
